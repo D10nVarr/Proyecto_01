@@ -13,7 +13,7 @@ class Estudiante(Usuario):
         self.carnet = carnet
 
     def mostrar_datos(self):
-        return f"Carnet: {self.carnet} | Nombre: {self.nombre} | Correo: {self.correo} Telefono: {self.telefono}"
+        return f"Carnet: {self.carnet} | Nombre: {self.nombre} | Correo: {self.correo} telefono: {self.telefono}"
 
 
 
