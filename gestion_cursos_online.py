@@ -7,6 +7,11 @@ class Usuario: #para guardar al instructor y al estudiante
     def mostrar_datos(self):
         pass
 
+class Curso:
+    def __init__(self, nombre_curso, codigo_curso):
+        self.nombre_curso = nombre_curso
+        self.codigo_curso = codigo_curso
+
 class Estudiante(Usuario):
     def __init__(self, nombre, correo, telefono, carnet):
         super().__init__(nombre, correo, telefono)
@@ -17,11 +22,12 @@ class Estudiante(Usuario):
         return f"Carnet: {self.carnet} | Nombre: {self.nombre} | Correo: {self.correo} | Telefono: {self.telefono}"
 
 class Instructor(Usuario):
-    def __init__(self,nombre,correo,telefono,codigo,profesion):
+    def __init__(self,nombre,correo,telefono,codigo,profesion, curso):
         super().__init__(nombre,correo,telefono)
         self.__codigo = codigo
         self.profesion = profesion
         self.estudiantes = {}
+        self.curso = curso
 
     def ver_codigo(self):
         return self.__codigo
@@ -29,19 +35,11 @@ class Instructor(Usuario):
     def crear_curso(self):
         pass
 
-
     def mostrar_datos(self):
-        return f"Instructor-Nombre: {self.nombre} | Profesion: {self.profesion} | Correo: {self.correo} | Telefono: {self.telefono}"
+        return f"Instructor: {self.nombre} | Código: {self.__codigo} | Profesion: {self.profesion} | Correo: {self.correo} | Telefono: {self.telefono} | Curso: {self.curso.nombre_curso}  {self.curso.codigo_curso}"
 
+curso = Curso("Mate","CR-001")
+profe = Instructor("Diego", "diego@profe.com", "31232566", "777","Ingeniero",curso)
 
-class Curso:
-    def __init__(self, nombre_curso, codigo_curso, instructor):
-        self.nombre_curso = nombre_curso
-        self.codigo_curso = codigo_curso
-        self.instructor = instructor
-
-    def mostrar_datos(self):
-        return (f"Curso: {self.nombre_curso},"
-                f"\nCódigo de curso: {self.codigo_curso}"
-                f"\n{self.instructor.mostrar_datos()}")
+print(profe.mostrar_datos())
 
