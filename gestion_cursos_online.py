@@ -26,17 +26,15 @@ class Instructor(Usuario):
     def ver_codigo(self):
         return self.__codigo
 
+    def crear_curso(self):
+        pass
+
+
     def mostrar_datos(self):
         return f"Instructor-Nombre: {self.nombre} | Profesion: {self.profesion} | Correo: {self.correo} | Telefono: {self.telefono}"
 
-class Administrador(Usuario):
-    def __init__(self,nombre,correo):
-        super().__init__(nombre,correo)
 
-    def crear_curso(self,curso,tipo):
-        pass
-
-class Curso(Estudiante, Instructor):
+class Curso:
     def __init__(self, nombre_curso, codigo_curso, instructor):
         self.nombre_curso = nombre_curso
         self.codigo_curso = codigo_curso
@@ -47,6 +45,3 @@ class Curso(Estudiante, Instructor):
                 f"\nCódigo de curso: {self.codigo_curso}"
                 f"\n{self.instructor.mostrar_datos()}")
 
-i = Instructor("Melqui", "melqui@gmail.com","41357899","1564225","Ingeniero")
-c = Curso("Calculo", "201",i)
-print(c.mostrar_datos())
