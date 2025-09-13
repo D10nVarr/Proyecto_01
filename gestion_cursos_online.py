@@ -92,3 +92,51 @@ class Instructor(Usuario):
             cursos = "Ninguno"
 
         return f"Instructor | Código: {self._codigo} | Profesión: {self._profesion} | {super().mostrar_datos()} | Cursos: {cursos}"
+
+class Evaluacion:
+    def __init__(self, nombre, punteo):
+        self.nombre = nombre
+        self._punteo = punteo
+        self._calificaciones = {}
+
+    @property
+    def punteo(self):
+        return self._punteo
+
+    @property
+    def calificaciones(self):
+        return self._calificaciones
+
+    def registrar_calificacion(self, estudiante, nota):
+        self._calificaciones[estudiante._carnet] = nota
+
+    def ver_calificaciones(self):
+        if self._calificaciones:
+            for carnet, nota in self._calificaciones.items():
+                print(f"Carnet: {carnet} | Nota: {nota}")
+        else:
+            print("No hay calificaciones registradas.")
+
+class Examen(Evaluacion):
+    def __init__(self, nombre, ponderacion, duracion):
+        super().__init__(nombre, ponderacion)
+        self._duracion = duracion
+
+    @property
+    def duracion(self):
+        return self._duracion
+
+    def mostrar_info(self):
+        return f"Examen: {self.nombre} | Ponderación: {self._punteo}% | Duración: {self._duracion} min"
+
+class Tarea(Evaluacion):
+    def __init__(self, nombre, ponderacion, fecha_entrega):
+        super().__init__(nombre, ponderacion)
+        self._fecha_entrega = fecha_entrega
+
+    @property
+    def fecha_entrega(self):
+        return self._fecha_entrega
+
+    def mostrar_info(self):
+        return f"Tarea: {self.nombre} | Ponderación: {self._punteo}% | Fecha de entrega: {self._fecha_entrega}"
