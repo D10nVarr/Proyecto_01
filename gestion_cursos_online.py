@@ -200,6 +200,7 @@ while True:
                                    if i.codigo == codigo_curso:
                                        curso_ADM = i
                                        break
+
                                if curso_ADM:
                                    instructor.asignar_curso(curso_ADM)
                                    print(f"Curso: {codigo_curso} asignado a Instructor: {instructor.nombre}")
