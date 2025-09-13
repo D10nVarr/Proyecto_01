@@ -97,64 +97,137 @@ class Administrador(Usuario):
 
 admin=Administrador()
 
-print("----🛜 PORTAL CURSOS ONLINE 🛜----")
+estudiantes=["Juanito", "Samuel"]
+profesores=["Pedro", "Mateo"]
 
-print("Iniciar sesión\n")
-print("1. Administrador")
-print("2. Instructor")
-print("3. Estudiante")
-print("4. Salir")
+while True:
+    print("----🛜 PORTAL CURSOS ONLINE 🛜----")
 
-opcion1=input("\nSeleccione su tipo de usuario")
+    print("Iniciar sesión\n")
+    print("1. Administrador")
+    print("2. Instructor")
+    print("3. Estudiante")
+    print("4. Salir")
 
-match opcion1:
-    case "1":
-        codigo=input("Ingrese su codigo de admin: ")
+    opcion1=input("\nSeleccione su tipo de usuario")
 
-        if codigo==admin.codigo_ingreso:
-            print("--Portal del ADMIN 🤑🤑--\n")
-            print("1. Crear curso")
-            print("2. Asignar curso a instructor")
+    match opcion1:
+        case "1":
+            codigo=input("Ingrese su codigo de admin: ")
+
+            if codigo==admin.codigo_ingreso:
+                while True:
+                    print("--Portal del ADMIN 🤑🤑--\n")
+                    print("1. Crear curso")
+                    print("2. Asignar curso a instructor")
+                    print("3. Salir")
+
+                    opcion2=input("\nSeleccione lo que desee: ")
+
+                    match opcion2:
+                        case "1":
+                            print("Aqui se va a crear curso")
+                        case "2":
+                            print("Aqui se va a asignar curso")
+                        case "3":
+                            break
+            else:
+                print("Codio incorrecto ✖️")
+
+        case "2":
+            while True:
+                print("--Portal Instructor👨‍🏫👩‍🏫--\n")
+                print("1. Registrar usuario")
+                print("2. Acceder al portal")
+                print("3. Salir")
+
+                opcion3=input("\nInicie sesión")
+
+                match opcion3:
+                    case "1":
+                        print("Aqui se va a registrar usted")
+
+                    case "2":
+                        print("Aqui usted ya esta dentro del portal")
+
+                        profesor=input("Ingrese su código de profesor")
+
+                        if profesor in profesores:
+                            print(f"Bienvenido {profesor}")
+
+                            print("1. Añadir evaluacion a su curso")
+                            print("2. Añadir tarea a su curso")
+                            print("3. Añadir notas")
+                            print("4. Salir")
+
+                            option4=input("\nSeleccione una opción: ")
+
+                            match option4:
+                                case "1":
+                                    print("añadir evaluacion ")
+
+                                case "2":
+                                    print("añadir una tarea")
+
+                                case "3":
+                                    print("añadir notas")
+
+                                case "4":
+                                    print("Saliendo del portal de instructores...")
+                                    break
+                        else:
+                            print("Codigo de profesor incorrecto✖️")
+                    case "3":
+                        print("Saliendo ...")
+                        break
+
+        case "3":
+            print("--Portal Estudiante 📗🎓--\n")
+            print("1. Registrarse")
+            print("2. Acceder al portal")
             print("3. Salir")
 
-            opcion2=input("\nSeleccione lo que desee: ")
+            opcion5 = input("\nSeleccione lo que desee: ")
 
-            match opcion2:
+            match opcion5:
                 case "1":
-                    print("Aqui se va a crear curso")
+                    print("Aquí se va a registrar el estudiante")
+
                 case "2":
-                    print("Aqui se va a asignar curso")
+                    estudiante = input("Ingrese su código de estudiante: ")
+
+                    if estudiante in estudiantes:
+                        print(f"Bienvenido {estudiante}")
+
+                        print("1. Inscibirse a un curso")
+                        print("2. ver cursos inscritos")
+                        print("3. ver tareas")
+                        print("4. ver notas")
+                        print("5. Salir")
+
+                        opcion6 = input("\nSeleccione una opcion: ")
+                        match opcion6:
+                            case "1":
+                                print("inscribirse a un curso")
+
+                            case "2":
+                                print("Mostrar cursos")
+
+                            case "3":
+                                print("Mostrar tareas")
+
+                            case "4":
+                                print("Mostrar notas")
+
+                            case "5":
+                                print("Salir")
+                                break
+                    else:
+                        print("Codigo de estudiante incorrecto")
+
                 case "3":
-                    #break
-        else:
-            print("Codio incorrecto ✖️")
-
-    case "2":
-        print("--Portal Instructor👨‍🏫👩‍🏫--\n")
-        print("1. Registrar usuario")
-        print("2. Acceder al portal")
-        print("3. Salir")
-
-        opcion3=input("\nInicie sesión")
-
-        match opcion3:
-            case "1":
-                print("Aqui se va a registrar usted")
-
-            case "2":
-                print("Aqui usted ya esta dentro del portal")
-
-                profesor=input("Ingrese su código de profesor")
-
-                if profesor in profesores:
-                    print(f"Bienvenido {profesor}")
-
-                    print("1. Añadir evaluacion a su curso")
-                    print("2. Añadir tarea a su curso")
-                    print("3. Añadir notas")
-                    print("4. Salir")
-
-                    option4=input("\nSeleccione una opción: ")
-
-
-
+                    print(" salir")
+                    break
+        case "4":
+            print("Saliendo.....")
+            break
