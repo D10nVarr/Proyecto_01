@@ -83,18 +83,39 @@ class Administrador(Usuario):
         self._codigo_ingreso = "администратор007"
         self._cursos_creados = []
 
-
     @property
     def codigo_ingreso(self):
         return self._codigo_ingreso
 
-    def crear_curso(self, nombre_curso, codigo_curso, evaluacion=None, tarea=None):
-        curso = Curso(nombre_curso, codigo_curso, evaluacion, tarea)
+    def crear_curso(self):
+        nombre = input("Nombre de curso: ")
+        codigo_curso = input("Codigo de curso: ")
+        curso = Curso(nombre, codigo_curso,None,None)
         self._cursos_creados.append(curso)
-        #return curso
+        print(f"Curso: {nombre} creado con exito")
 
-    def asignar_curso_a_instructor(self, curso, instructor):
-        instructor.asignar_curso(curso)
+    def asignar_curso_a_instructor(self, instructores_registrados):
+        if not self._cursos_creados:
+            print("No hay cursos registrados")
+            return
+        if not instructores_registrados:
+            print("No hay instructores registrados")
+            return
+        codigo_curso = input("Codigo de curso: ")
+        codigo_instructor = input("Codigo de instructor: ")
+
+        Curso_ADM = None
+        for curso in self._cursos_creados:
+          if curso.codigo_curso == codigo_curso:
+             Curso_ADM = Curso
+             break
+
+        if Curso_ADM and codigo_instructor in instructores_registrados:
+            instructor = instructores_registrados[codigo_instructor]
+            instructor.asignar_curso(Curso_ADM)
+            print(f"Curso: {Curso_ADM} asignado a instructor: {instructor.nombre}")
+        else:
+            print("No hay cursos registrados")
 
 class Evaluacion:
     def __init__(self, nombre, punteo):
@@ -179,38 +200,14 @@ while True:
 
                     match opcion2:
                         case "1":
-                            nombre = input("Nombre de curso: ")
-                            codigo_curso = input("Codigo de curso: ")
-                            admin.crear_curso(nombre, codigo_curso)
+                            admin.crear_curso()
                         case "2":
-                           if not admin._cursos_creados:
-                               print("No se ha creado el curso.")
-                           if not instructores_registrados:
-                               print("No se ha registrado ningun instructor")
-
-                           codigo_curso = input("Codigo de curso: ")
-                           codigo_instructor = input("Codigo de instructor: ")
-
-
-                           if codigo_curso in instructores_registrados:
-                               instructor = instructores_registrados[codigo_instructor]
-
-                               curso_ADM = None
-                               for i in admin._cursos_creados:
-                                   if i.codigo == codigo_curso:
-                                       curso_ADM = i
-                                       break
-
-                               if curso_ADM:
-                                   instructor.asignar_curso(curso_ADM)
-                                   print(f"Curso: {codigo_curso} asignado a Instructor: {instructor.nombre}")
-                               else:
-                                   print("El curso no existe")
-                           else:
-                               print("No se ha encontrado instructor")
+                            admin.asignar_curso_a_instructor(instructores_registrados)
                         case "3":
                             print("Saliendo del portal admin....")
                             break
+                        case _:
+                            print("Opcion no valida")
             else:
                 print("Código incorrecto ✖️")
 
