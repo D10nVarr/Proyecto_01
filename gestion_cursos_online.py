@@ -80,6 +80,26 @@ class RegistroEstudiante:
         }
         print(f"Curso {curso.nombre_curso} asignado correctamente\n")
 
+    def mostrar_tareas_y_evaluaciones(self, carnet, cursos_admin):
+        estudiante = self.estudiantes_registrados.get(carnet)
+        if not estudiante:
+            print("Estudiante no registrado.")
+            return
+
+        if not estudiante.cursos_inscritos:
+            print("No tienes cursos asignados aún.\n")
+            return
+
+        for codigo, datos in estudiante.cursos_inscritos.items():
+            curso = next((c for c in cursos_admin if c.codigo_curso == codigo), None)
+            if curso:
+                print(f"\n📘 {curso.nombre_curso} ({codigo})")
+                if not curso.evaluacion:
+                    print("   No hay evaluaciones registradas.")
+                else:
+                    for ev in curso.evaluacion:
+                        print("   -", ev.mostrar_info())
+
     def mostrar_notas(self, carnet):
         obj_estudiante = self.estudiantes_registrados[carnet]
         if not obj_estudiante.cursos_inscritos:
@@ -428,8 +448,7 @@ while True:
                                         obj_estudiantes.mostrar_cursos(carnet_validacion)
 
                                     case "3":
-                                        print("Mostrar tareas")
-                                        # pendiente por sistema de tareas
+                                        obj_estudiantes.mostrar_tareas_y_evaluaciones(carnet_validacion, admin._cursos_creados)
 
                                     case "4":
                                         print("Mostrar notas")
