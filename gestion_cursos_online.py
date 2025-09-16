@@ -221,7 +221,6 @@ class Tarea(Evaluacion):
 admin=Administrador()
 
 obj_estudiantes=RegistroEstudiante()
-#instructores_registrados = {}#pendiente de la parte de instructores
 obj_instructor = RegistroInstructor()
 
 while True:
@@ -312,7 +311,43 @@ while True:
                                         else:
                                             print("Este curso no existe")
                                     case "2":
-                                        print("Añadir notas")
+                                        print("__Cursos__\n")
+                                        for curso in instructor._cursos_impartidos:
+                                            print(curso.mostrar_datos_curso())
+                                        print("")
+
+                                        codigo_curso_algo = input(
+                                            "Ingrese el código del curso en el que desea añadir notas: ")
+
+                                        asignatura = None
+                                        for curso in instructor._cursos_impartidos:
+                                            if curso.codigo_curso == codigo_curso_algo:
+                                                asignatura = curso
+                                                break
+
+                                        if asignatura:
+                                            if not asignatura.estudiantes:
+                                                print("Este curso no tiene estudiantes inscritos aún.")
+                                            else:
+                                                print(f"Estudiantes inscritos en {asignatura.nombre_curso}:")
+                                                for carnet in asignatura.estudiantes:
+                                                    print(f" - {carnet}")
+
+                                                carnet_est = input("Ingrese el carnet del estudiante: ")
+                                                if carnet_est in obj_estudiantes.estudiantes_registrados:
+                                                    estudiante = obj_estudiantes.estudiantes_registrados[carnet_est]
+                                                    if codigo_curso_algo in estudiante.cursos_inscritos:
+                                                        nota = float(input("Ingrese la nota: "))
+                                                        estudiante.cursos_inscritos[codigo_curso_algo]["Nota"] = nota
+                                                        print(
+                                                            f"✅ Nota {nota} asignada a {estudiante.nombre} en {asignatura.nombre_curso}\n")
+                                                    else:
+                                                        print("El estudiante no está inscrito en este curso.")
+                                                else:
+                                                    print("El carnet ingresado no está registrado.")
+                                        else:
+                                            print("Este curso no existe o no está asignado a usted.")
+
                                     case "3":
                                         print("Añadir reportes")
                                     case "4":
