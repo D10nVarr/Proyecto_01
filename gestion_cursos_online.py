@@ -296,8 +296,7 @@ while True:
                 print("--Portal Estudiante 📗🎓--\n")
                 print("1. Registrarse")
                 print("2. Acceder al portal")
-                print("3. Mostrar reporte por curso")
-                print("4. Salir")
+                print("3. Salir")
 
                 opcion5 = input("\nSeleccione lo que desee: ")
 
