@@ -8,13 +8,13 @@ class Usuario:  # Clase base para Instructor y Estudiante
         pass
 
 class Curso:
-    def __init__(self, nombre_curso, codigo_curso, evaluacion=None, tarea=None):
+    def __init__(self, nombre_curso, codigo_curso):
         self.nombre_curso = nombre_curso
         self.__codigo_curso = codigo_curso
         self.instructor = None
         self.estudiantes = [] # almacenar carnets de estudiantes para su posterior búsqueda
-        self.tarea = tarea
-        self.evaluacion = evaluacion
+        self.tarea = [] #almacena objetos de tareas
+        self.evaluacion = [] #almacena objetos de evaluaciones
 
     @property
     def codigo_curso(self):
@@ -139,11 +139,13 @@ class RegistroInstructor:
         else:
             return None
 
-    def crear_evaluacion(self):
-        r1 = self.instructores_registrados[codigo]
+    def crear_evaluacion(self, curso): #objeto de curso, que se necesita ingresar para luego verificar si esta dentro de sus cursos impartidos (a realizar) en el menú
+    # agregar evaluacion al objeto del curso
+        evaluacion=input("Ingrese el nombre de la evaluacion: ")
+        obj_evaluacion=Evaluacion(evaluacion)
+        curso.evaluacion.append(obj_evaluacion)
 
 
-ri = RegistroInstructor()
 
 class Administrador(Usuario):
     def __init__(self):
@@ -158,7 +160,7 @@ class Administrador(Usuario):
     def crear_curso(self):
         nombre = input("Nombre de curso: ")
         codigo_curso = input("Codigo de curso: ")
-        curso = Curso(nombre, codigo_curso,None,None)
+        curso = Curso(nombre, codigo_curso)
         self._cursos_creados.append(curso)
         print(f"Curso: {nombre} creado con exito")
 
@@ -189,6 +191,9 @@ class Evaluacion:
     def __init__(self, nombre):
         self.nombre = nombre
 
+    def mostrar_evaluacion(self):
+        print(f"Evaluación: {self.nombre}")
+
 class Examen(Evaluacion):
     def __init__(self, nombre, duracion):
         super().__init__(nombre)
@@ -216,7 +221,8 @@ class Tarea(Evaluacion):
 admin=Administrador()
 
 obj_estudiantes=RegistroEstudiante()
-instructores_registrados = {}#pendiente de la parte de instructores
+#instructores_registrados = {}#pendiente de la parte de instructores
+obj_instructor = RegistroInstructor()
 
 while True:
     print("----🛜 PORTAL CURSOS ONLINE 🛜----")
@@ -247,7 +253,7 @@ while True:
                         case "1":
                             admin.crear_curso()
                         case "2":
-                            admin.asignar_curso_a_instructor(instructores_registrados)
+                            admin.asignar_curso_a_instructor(obj_instructor.instructores_registrados)
                         case "3":
                             print("Reporte de promedio de notas")
                         case "4":
@@ -269,11 +275,11 @@ while True:
 
                 match opcion3:
                     case "1":
-                        ri.registrar_instructor()
+                        obj_instructor.registrar_instructor()
 
                     case "2":
                         codigo_instructor = input("Ingrese su código de instructor: ")
-                        instructor = ri.obtener_instructor(codigo_instructor)
+                        instructor = obj_instructor.obtener_instructor(codigo_instructor)
 
                         if instructor:
                             while True:
@@ -287,7 +293,24 @@ while True:
 
                                 match option4:
                                     case "1":
-                                        instructor.añadir_evaluacion()
+                                        print("__Cursos impartidos__\n")
+                                        for curso in instructor._cursos_impartidos:
+                                            print(curso.mostrar_datos_curso())
+                                        print("")
+
+                                        codigo_curso_algo=input("Ingrese el código del curso al que desea asignarle un examen: ")
+
+                                        asignatura = None
+                                        for curso in admin._cursos_creados:
+                                            if curso.codigo_curso == codigo_curso_algo:
+                                                asignatura = curso
+                                                break
+
+                                        if asignatura:
+                                            obj_instructor.crear_evaluacion(asignatura)
+
+                                        else:
+                                            print("Este curso no existe")
                                     case "2":
                                         print("Añadir notas")
                                     case "3":
