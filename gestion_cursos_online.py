@@ -83,6 +83,7 @@ class Administrador(Usuario):
         self._codigo_ingreso = "администратор007"
         self._cursos_creados = []
 
+
     @property
     def codigo_ingreso(self):
         return self._codigo_ingreso
