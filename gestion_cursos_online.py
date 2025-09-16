@@ -104,16 +104,16 @@ class Administrador(Usuario):
         codigo_curso = input("Codigo de curso: ")
         codigo_instructor = input("Codigo de instructor: ")
 
-        Curso_ADM = None
+        curso_ADM = None
         for curso in self._cursos_creados:
           if curso.codigo_curso == codigo_curso:
-             Curso_ADM = Curso
+             curso_ADM = curso
              break
 
-        if Curso_ADM and codigo_instructor in instructores_registrados:
+        if curso_ADM and codigo_instructor in instructores_registrados:
             instructor = instructores_registrados[codigo_instructor]
-            instructor.asignar_curso(Curso_ADM)
-            print(f"Curso: {Curso_ADM} asignado a instructor: {instructor.nombre}")
+            instructor.asignar_curso(curso_ADM)
+            print(f"Curso: {curso_ADM} asignado a instructor: {instructor.nombre}")
         else:
             print("No hay cursos registrados")
 
