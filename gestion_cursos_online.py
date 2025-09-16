@@ -317,8 +317,7 @@ while True:
                                 print(f"\nBienvenido {instructor.nombre} 👋")
                                 print("1. Añadir evaluación a su curso")
                                 print("2. Añadir notas")
-                                print("3. Añadir reportes")
-                                print("4. Salir")
+                                print("3. Salir")
 
                                 option4 = input("\nSeleccione una opción: ")
 
@@ -381,8 +380,6 @@ while True:
                                             print("Este curso no existe o no está asignado a usted.")
 
                                     case "3":
-                                        print("Añadir reportes")
-                                    case "4":
                                         print("Saliendo del portal de instructores...")
                                         break
                         else:
@@ -397,8 +394,7 @@ while True:
                 print("--Portal Estudiante 📗🎓--\n")
                 print("1. Registrarse")
                 print("2. Acceder al portal")
-                print("3. Mostrar reporte por curso")
-                print("4. Salir")
+                print("3. Salir")
 
                 opcion5 = input("\nSeleccione lo que desee: ")
 
