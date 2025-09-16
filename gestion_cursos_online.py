@@ -25,7 +25,7 @@ class Curso:
         self.__codigo_curso = new_codigo_curso
 
     def asignar_instructor(self, instructor):
-        self._instructor = instructor
+        self.instructor = instructor
 
     def mostrar_datos_curso(self):
         return f"Curso: {self.nombre_curso} | Código: {self.codigo_curso} | Instructor: {self.instructor.nombre if self.instructor else 'Sin asignar'}"
@@ -176,14 +176,14 @@ class Administrador(Usuario):
 
         Curso_ADM = None
         for curso in self._cursos_creados:
-          if curso.codigo_curso == codigo_curso:
-             Curso_ADM = Curso
-             break
+            if curso.codigo_curso == codigo_curso:
+                Curso_ADM = curso
+                break
 
         if Curso_ADM and codigo_instructor in instructores_registrados:
             instructor = instructores_registrados[codigo_instructor]
             instructor.asignar_curso(Curso_ADM)
-            print(f"Curso: {Curso_ADM} asignado a instructor: {instructor.nombre}")
+            print(f"Curso: {Curso_ADM.nombre_curso} asignado a instructor: {instructor.nombre}")
         else:
             print("No hay cursos registrados")
 
