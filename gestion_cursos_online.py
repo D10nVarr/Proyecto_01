@@ -12,9 +12,8 @@ class Curso:
         self.nombre_curso = nombre_curso
         self.__codigo_curso = codigo_curso
         self.instructor = None
-        self.estudiantes = [] # almacenar carnets de estudiantes para su posterior búsqueda
-        self.tarea = [] #almacena objetos de tareas
-        self.evaluacion = [] #almacena objetos de evaluaciones
+        self.estudiantes = []  # carnets de estudiantes
+        self.evaluacion = []
 
     @property
     def codigo_curso(self):
@@ -139,13 +138,26 @@ class RegistroInstructor:
         else:
             return None
 
-    def crear_evaluacion(self, curso): #objeto de curso, que se necesita ingresar para luego verificar si esta dentro de sus cursos impartidos (a realizar) en el menú
-    # agregar evaluacion al objeto del curso
-        evaluacion=input("Ingrese el nombre de la evaluacion: ")
-        obj_evaluacion=Evaluacion(evaluacion)
-        curso.evaluacion.append(obj_evaluacion)
+    def crear_evaluacion(self, curso):
+        print("Seleccione tipo de evaluación:")
+        print("1. Examen")
+        print("2. Tarea")
+        opcion = input("Ingrese opción: ")
 
+        nombre = input("Ingrese el nombre de la evaluación: ")
 
+        if opcion == "1":
+            duracion = input("Duración del examen (minutos): ")
+            evaluacion = Examen(nombre, duracion)
+        elif opcion == "2":
+            fecha_entrega = input("Fecha de entrega (dd/mm/aaaa): ")
+            evaluacion = Tarea(nombre, fecha_entrega)
+        else:
+            print("Opción no válida")
+            return
+
+        curso.evaluacion.append(evaluacion) # Guarda la evaluacion en la lista de curso
+        print(f"{evaluacion.nombre} agregado al curso {curso.nombre_curso}\n")
 
 class Administrador(Usuario):
     def __init__(self):
