@@ -12,7 +12,7 @@ class Curso:
         self.nombre_curso = nombre_curso
         self.__codigo_curso = codigo_curso
         self.instructor = None
-        self.estudiantes = []  # almacenar carnets de estudiantes para su posterior búsqueda
+        self.estudiantes = [] # almacenar carnets de estudiantes para su posterior búsqueda
         self.tarea = tarea
         self.evaluacion = evaluacion
 
@@ -24,12 +24,11 @@ class Curso:
     def codigo_curso(self, new_codigo_curso):
         self.__codigo_curso = new_codigo_curso
 
-
     def asignar_instructor(self, instructor):
         self._instructor = instructor
 
     def mostrar_datos_curso(self):
-        return f"Curso: {self.nombre_curso} | Código: {self.codigo_curso} | Instructor: {self._instructor.nombre if self._instructor else 'Sin asignar'}"
+        return f"Curso: {self.nombre_curso} | Código: {self.codigo_curso} | Instructor: {self.instructor.nombre if self.instructor else 'Sin asignar'}"
 
 class Estudiante(Usuario):
     def __init__(self, nombre, correo, telefono, carnet):
@@ -128,13 +127,35 @@ class Administrador(Usuario):
     def codigo_ingreso(self):
         return self._codigo_ingreso
 
-    def crear_curso(self, nombre_curso, codigo_curso, evaluacion=None, tarea=None):
-        curso = Curso(nombre_curso, codigo_curso, evaluacion, tarea)
+    def crear_curso(self):
+        nombre = input("Nombre de curso: ")
+        codigo_curso = input("Codigo de curso: ")
+        curso = Curso(nombre, codigo_curso,None,None)
         self._cursos_creados.append(curso)
-        #return curso
+        print(f"Curso: {nombre} creado con exito")
 
-    def asignar_curso_a_instructor(self, curso, instructor):
-        instructor.asignar_curso(curso)
+    def asignar_curso_a_instructor(self, instructores_registrados):
+        if not self._cursos_creados:
+            print("No hay cursos registrados")
+            return
+        if not instructores_registrados:
+            print("No hay instructores registrados")
+            return
+        codigo_curso = input("Codigo de curso: ")
+        codigo_instructor = input("Codigo de instructor: ")
+
+        Curso_ADM = None
+        for curso in self._cursos_creados:
+          if curso.codigo_curso == codigo_curso:
+             Curso_ADM = Curso
+             break
+
+        if Curso_ADM and codigo_instructor in instructores_registrados:
+            instructor = instructores_registrados[codigo_instructor]
+            instructor.asignar_curso(Curso_ADM)
+            print(f"Curso: {Curso_ADM} asignado a instructor: {instructor.nombre}")
+        else:
+            print("No hay cursos registrados")
 
 class Evaluacion:
     def __init__(self, nombre, punteo):
@@ -187,7 +208,7 @@ class Tarea(Evaluacion):
 admin=Administrador()
 
 obj_estudiantes=RegistroEstudiante()
-profesores=["Pedro", "Mateo"]
+instructores_registrados = {}#pendiente de la parte de instructores
 
 while True:
     print("----🛜 PORTAL CURSOS ONLINE 🛜----")
@@ -215,11 +236,14 @@ while True:
 
                     match opcion2:
                         case "1":
-                            print("Aquí se va a crear curso")
+                            admin.crear_curso()
                         case "2":
-                            print("Aquí se va a asignar curso")
+                            admin.asignar_curso_a_instructor(instructores_registrados)
                         case "3":
+                            print("Saliendo del portal admin....")
                             break
+                        case _:
+                            print("Opcion no valida")
             else:
                 print("Código incorrecto ✖️")
 
@@ -239,7 +263,7 @@ while True:
                     case "2":
                         profesor = input("Ingrese su código de profesor: ")
 
-                        if profesor in profesores:
+                        if profesor in instructores_registrados:
                             while True:
                                 print(f"Bienvenido {profesor}\n")
                                 print("1. Añadir evaluación a su curso")
@@ -293,9 +317,27 @@ while True:
                                 opcion6 = input("\nSeleccione una opción: ")
                                 match opcion6:
                                     case "1":
+                                        print("Asignación de cursos\n")
+
+                                        print("__Cursos disponibles__\n")
+                                        for curso in admin._cursos_creados:
+                                            print(curso.mostrar_datos_curso())
+
+                                        print("")
+
                                         codigo_curso_buscador=input("Ingrese el código del curso al que se desee asignar: ")
-                                        curso=Curso("Matemática", codigo_curso_buscador)#provisional hasta comprender manejo del ADMIN
-                                        obj_estudiantes.asignar_curso(carnet_validacion, curso.codigo_curso)
+                                        asignatura=None
+                                        for curso in admin._cursos_creados:
+                                            if curso.codigo_curso == codigo_curso_buscador:
+                                                asignatura=curso
+                                                break
+
+                                        if asignatura:
+                                            obj_estudiantes.asignar_curso(carnet_validacion, asignatura)
+
+                                        else:
+                                            print("Este curso no existe")
+
                                     case "2":
                                         print("Mostrar cursos")
                                         obj_estudiantes.mostrar_cursos(carnet_validacion)
