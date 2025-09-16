@@ -240,6 +240,8 @@ while True:
                         case "2":
                             admin.asignar_curso_a_instructor(instructores_registrados)
                         case "3":
+                            print("Reporte de promedio de notas")
+                        case "4":
                             print("Saliendo del portal admin....")
                             break
                         case _:
@@ -294,7 +296,8 @@ while True:
                 print("--Portal Estudiante 📗🎓--\n")
                 print("1. Registrarse")
                 print("2. Acceder al portal")
-                print("3. Salir")
+                print("3. Mostrar reporte por curso")
+                print("4. Salir")
 
                 opcion5 = input("\nSeleccione lo que desee: ")
 
