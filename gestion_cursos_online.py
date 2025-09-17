@@ -382,12 +382,18 @@ while True:
                                     case "3":
                                         print("Saliendo del portal de instructores...")
                                         break
+
+                                    case _:
+                                        print("Error: Opción no válida, intente de nuevo.\n")
                         else:
                             print("Código de profesor incorrecto ✖️")
 
                     case "3":
                         print("Saliendo...\n")
                         break
+
+                    case _:
+                        print("Error: Opción no válida, intente de nuevo.\n")
 
         case "3":
             while True:
@@ -453,6 +459,9 @@ while True:
                                     case "5":
                                         print("Saliendo del portal de estudiantes...")
                                         break
+
+                                    case _:
+                                        print("Error: Opción no válida, intente de nuevo.\n")
                         else:
                             print("Código de estudiante incorrecto")
 
@@ -460,6 +469,12 @@ while True:
                         print("Salir del portal de estudiantes...")
                         break
 
+                    case _:
+                        print("Error: Opción no válida, intente de nuevo.\n")
+
         case "4":
             print("Saliendo.....")
             break
+
+        case _:
+            print("Error: Opción no válida, intente de nuevo.\n")
