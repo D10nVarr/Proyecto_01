@@ -571,6 +571,7 @@ class Administrador(Usuario):
                     print(f"{curso.nombre_curso}({curso.codigo_curso}): Sin estudiantes inscritos.\n")
                     continue
                 print(f"\nCurso: {curso.nombre_curso}({curso.codigo_curso})")
+
             for carnet in curso.estudiantes:
                 if carnet in obj_estudiantes.estudiantes_registrados:
                     estudiante = obj_estudiantes.estudiantes_registrados[carnet]
@@ -635,7 +636,7 @@ while True:
 
     match opcion1:
         case "1":
-            codigo = input("Ingrese su código de admin: ")
+            codigo = input("Ingrese su código de admin (администратор007): ")
 
 
             if codigo == admin.codigo_ingreso:
