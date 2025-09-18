@@ -51,20 +51,46 @@ class RegistroEstudiante:
         self.estudiantes_registrados={}#almacena todos los objetos de estudiantes
 
     def registrar_est(self, carnet):
-        nombre=input("Ingrese su nombre: ")
-        correo=input("Ingrese su correo: ")
+        while True:
+            try:
+                nombre = input("Ingrese su nombre: ")
+                if nombre is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                nombre = nombre.strip()
+                if nombre == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
+
+        while True:
+            try:
+                correo = input("Ingrese su correo: ")
+                if correo is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                correo = correo.strip()
+                if correo == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
         while True:
             telefono=input("Ingrese su teléfono: ")
             if len(telefono)==8:
                 break
             else:
-                print("Numero de teléfono no válido")
+                print("Numero de teléfono no válido, debe contener 8 dígitos\n")
 
         if carnet not in self.estudiantes_registrados:
             estudiante = Estudiante(nombre, correo, telefono, carnet)
-            self.estudiantes_registrados[carnet]=estudiante
+            self.estudiantes_registrados[carnet] = estudiante
             print(f"El estudiante {nombre} registrado con su carnet {carnet} correctamente ✔️\n")
-
         else:
             print("Este carnet ya registrado con su estudiante")
 
@@ -174,13 +200,57 @@ class RegistroInstructor:
         self.instructores_registrados = {}
 
     def registrar_instructor(self, codigo):
-        nombre = input("Nombre: ")
-        correo = input("Correo: ")
+        while True:
+            try:
+                nombre = input("Nombre: ")
+                if nombre is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                nombre = nombre.strip()
+                if nombre == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
+
+        while True:
+            try:
+                correo = input("Correo: ")
+                if correo is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                correo = correo.strip()
+                if correo == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
+
         while True:
             telefono = input("Ingrese su teléfono: ")
             if len(telefono) == 8:
                 break
-        profesion = input("Profesión: ")
+            else:
+                print("Numero de teléfono no válido, debe contener 8 dígitos\n")
+
+        while True:
+            try:
+                profesion = input("Profesión: ")
+                if profesion is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                profesion = profesion.strip()
+                if profesion == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
 
         if codigo not in self.instructores_registrados:
             instructor = Instructor(nombre, correo, telefono, codigo, profesion)
@@ -199,21 +269,80 @@ class RegistroInstructor:
         print("Seleccione tipo de evaluación:")
         print("1. Examen")
         print("2. Tarea")
-        opcion = input("Ingrese opción: ")
 
-        nombre = input("Ingrese el nombre de la evaluación: ")
+        while True:
+            try:
+                opcion = input("Ingrese opción: ")
+                if opcion is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                opcion = opcion.strip()
+                if opcion not in ("1", "2"):
+                    print("Opción no válida\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
+
+        while True:
+            try:
+                nombre = input("Ingrese el nombre de la evaluación: ")
+                if nombre is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                nombre = nombre.strip()
+                if nombre == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
 
         if opcion == "1":
-            duracion = input("Duración del examen (minutos): ")
+            while True:
+                try:
+                    dur = input("Duración del examen (minutos): ")
+                    if dur is None:
+                        print("Error: entrada vacía. Intente de nuevo.\n")
+                        continue
+                    dur = dur.strip()
+                    if dur == "":
+                        print("No puede dejar este campo vacío.\n")
+                        continue
+                    duracion = int(dur)
+                    if duracion <= 0:
+                        print("La duración debe ser un entero positivo.\n")
+                        continue
+                except ValueError:
+                    print("Ingrese un número entero válido para la duración.\n")
+                except TypeError:
+                    print("Tipo de dato inválido para duración.\n")
+                except Exception as e:
+                    print(f"Error inesperado: {e}\n")
+                else:
+                    break
             evaluacion = Examen(nombre, duracion)
-        elif opcion == "2":
-            fecha_entrega = input("Fecha de entrega (dd/mm/aaaa): ")
-            evaluacion = Tarea(nombre, fecha_entrega)
-        else:
-            print("Opción no válida")
-            return
 
-        curso.evaluacion.append(evaluacion) # Guarda la evaluacion en la lista de curso
+        else:
+            while True:
+                try:
+                    fecha_entrega = input("Fecha de entrega (dd/mm/aaaa): ")
+                    if fecha_entrega is None:
+                        print("Error: entrada vacía. Intente de nuevo.\n")
+                        continue
+                    fecha_entrega = fecha_entrega.strip()
+                    if fecha_entrega == "":
+                        print("No puede dejar este campo vacío.\n")
+                        continue
+                except Exception as e:
+                    print(f"Error inesperado: {e}")
+                else:
+                    break
+            evaluacion = Tarea(nombre, fecha_entrega)
+
+        curso.evaluacion.append(evaluacion)
         print(f"{evaluacion.nombre} agregado al curso {curso.nombre_curso}\n")
 
     def anadir_punteo_evaluacion(self, asignatura, registro_estudiantes):
@@ -243,6 +372,10 @@ class RegistroInstructor:
                     print("Número fuera de rango.")
             except ValueError:
                 print("Ingrese un número válido.")
+            except TypeError:
+                print("Tipo de dato inválido.")
+            except Exception as e:
+                print(f"Error inesperado: {e}")
 
         evaluacion = asignatura.evaluacion[idx - 1]
 
@@ -250,7 +383,20 @@ class RegistroInstructor:
         for carnet in asignatura.estudiantes:
             print(f" - {carnet}")
 
-        carnet_est = input("Ingrese el carnet del estudiante: ")
+        while True:
+            try:
+                carnet_est = input("Ingrese el carnet del estudiante: ")
+                if carnet_est is None:
+                    print("Error: entrada vacía. Intente de nuevo.")
+                    continue
+                carnet_est = carnet_est.strip()
+                if carnet_est == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}")
+            else:
+                break
 
         if carnet_est not in registro_estudiantes.estudiantes_registrados:
             print("El carnet ingresado no está registrado.")
@@ -264,13 +410,25 @@ class RegistroInstructor:
 
         while True:
             try:
-                nota = float(input("Ingrese el punteo: "))
+                nota_str = input("Ingrese el punteo: ")
+                if nota_str is None:
+                    print("Error: entrada vacía. Intente de nuevo.")
+                    continue
+                nota_str = nota_str.strip()
+                if nota_str == "":
+                    print("No puede dejar la nota vacía.")
+                    continue
+                nota = float(nota_str)
                 if 0 <= nota <= 100:
                     break
                 else:
                     print("El punteo debe estar entre 0 y 100.")
             except ValueError:
                 print("Ingrese un número válido para el punteo.")
+            except TypeError:
+                print("Tipo de dato inválido para el punteo.")
+            except Exception as e:
+                print(f"Error inesperado: {e}")
 
         evaluacion.asignar_punteo(carnet_est, nota)
 
@@ -279,7 +437,6 @@ class RegistroInstructor:
             total += ev.obtener_punteo(carnet_est)
 
         estudiante.cursos_inscritos[asignatura.codigo_curso]["Nota"] = total
-
         print(f"Punteo {nota} registrado en '{evaluacion.nombre}'. Nota final actual: {total:.2f}\n")
 
 class Administrador(Usuario):
@@ -454,7 +611,7 @@ while True:
                         case _:
                             print("Error: Opción no válida, intente de nuevo.\n")
             else:
-                print("Código incorrecto ✖️")
+                print("Código incorrecto ✖️\n")
 
         case "2":
             while True:
@@ -468,7 +625,20 @@ while True:
                 match opcion3:
                     case "1":
                         print("\n--- Registro de Instructor ---")
-                        codigo = input("Código de Instructor: ")
+                        while True:
+                            try:
+                                codigo = input("Código de Instructor: ")
+                                if codigo is None:
+                                    print("Error: entrada vacía. Intente de nuevo.\n")
+                                    continue
+                                codigo = codigo.strip()
+                                if codigo == "":
+                                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                                    continue
+                            except Exception as e:
+                                print(f"Error inesperado: {e}\n")
+                            else:
+                                break
 
                         if codigo not in obj_estudiantes.estudiantes_registrados:
                             obj_instructor.registrar_instructor(codigo)
@@ -553,7 +723,7 @@ while True:
 
         case "3":
             while True:
-                print("--\nPortal Estudiante 📗🎓--\n")
+                print("\n--Portal Estudiante 📗🎓--\n")
                 print("1. Registrarse")
                 print("2. Acceder al portal")
                 print("3. Salir")
@@ -563,7 +733,21 @@ while True:
                 match opcion5:
                     case "1":
                         print("\n--- Registro de Estudiante ---\n")
-                        carnet=input("Ingrese su carnet: ")#validacion de existencia
+                        while True:
+                            try:
+                                carnet = input("Ingrese su carnet: ")
+                                if carnet is None:
+                                    print("Error: entrada vacía. Intente de nuevo.\n")
+                                    continue
+                                carnet = carnet.strip()
+                                if carnet == "":
+                                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                                    continue
+                            except Exception as e:
+                                print(f"Error inesperado: {e}")
+                            else:
+                                break
+
                         if carnet not in obj_instructor.instructores_registrados:
                             obj_estudiantes.registrar_est(carnet)
                         else:
