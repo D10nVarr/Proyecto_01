@@ -105,22 +105,44 @@ class RegistroEstudiante:
             curso = next((c for c in cursos_admin if c.codigo_curso == codigo), None)
             if curso:
                 print(f"\n📘 {curso.nombre_curso} ({codigo})")
-                if not curso.evaluacion:
-                    print("   No hay evaluaciones registradas.")
+                tareas = [ev for ev in curso.evaluacion if isinstance(ev, Tarea)]
+                if not tareas:
+                    print("   No hay tareas registradas.")
                 else:
-                    for ev in curso.evaluacion:
+                    for ev in tareas:
                         print("   -", ev.mostrar_info())
 
-    def mostrar_notas(self, carnet):
-        obj_estudiante = self.estudiantes_registrados[carnet]
-        if not obj_estudiante.cursos_inscritos:
-            print(f"El estudiante {obj_estudiante._carnet} no tiene cursos asignados.\n")
-        else:
-            print(f"Notas de cursos del estudiante {obj_estudiante._carnet}:\n")
+    def mostrar_notas(self, carnet, cursos_admin):
+        obj_estudiante = self.estudiantes_registrados.get(carnet)
+        if not obj_estudiante:
+            print("Estudiante no registrado.")
+            return
 
-            for codigo, datos in obj_estudiante.cursos_inscritos.items():
-                print(f" ➡️ {datos['Nombre']} ({codigo}): {datos['Nota']}")
-            print("")
+        if not obj_estudiante.cursos_inscritos:
+            print(f"El estudiante {carnet} no tiene cursos asignados.\n")
+            return
+
+        print(f"Notas por curso del estudiante {obj_estudiante._carnet}:\n")
+
+        for codigo, datos in obj_estudiante.cursos_inscritos.items():
+            curso = next((c for c in cursos_admin if c.codigo_curso == codigo), None)
+            if not curso:
+                continue
+
+            print(f"➡️ {datos['Nombre']} ({codigo}):")
+            if not curso.evaluacion:
+                print("   No hay evaluaciones registradas.")
+                print("   Nota final: 0\n")
+                continue
+
+            total = 0
+            for ev in curso.evaluacion:
+                punteo = ev.obtener_punteo(obj_estudiante._carnet)
+                tipo = "Examen" if isinstance(ev, Examen) else "Tarea"
+                print(f"   - {tipo}: {ev.nombre} -> {punteo}")
+                total += punteo
+
+            print(f"   Nota final: {total}\n")
 
 class Instructor(Usuario):
     def __init__(self, nombre, correo, telefono, codigo, profesion):
@@ -194,8 +216,7 @@ class RegistroInstructor:
         curso.evaluacion.append(evaluacion) # Guarda la evaluacion en la lista de curso
         print(f"{evaluacion.nombre} agregado al curso {curso.nombre_curso}\n")
 
-    def anadir_nota(self, asignatura, registro_estudiantes):
-        """Añade una nota a un estudiante ya que el curso (asignatura) viene seleccionado desde el menú."""
+    def anadir_punteo_evaluacion(self, asignatura, registro_estudiantes):
         if not asignatura:
             print("Este curso no existe o no está asignado a usted.")
             return
@@ -203,6 +224,27 @@ class RegistroInstructor:
         if not asignatura.estudiantes:
             print("Este curso no tiene estudiantes inscritos aún.")
             return
+
+        if not asignatura.evaluacion:
+            print("Este curso no tiene evaluaciones registradas.")
+            return
+
+        print(f"Evaluaciones del curso {asignatura.nombre_curso}:")
+        for i, ev in enumerate(asignatura.evaluacion, start=1):
+            print(f"{i}. {ev.mostrar_info()}")
+        print("")
+
+        while True:
+            try:
+                idx = int(input("Seleccione la evaluación por número: "))
+                if 1 <= idx <= len(asignatura.evaluacion):
+                    break
+                else:
+                    print("Número fuera de rango.")
+            except ValueError:
+                print("Ingrese un número válido.")
+
+        evaluacion = asignatura.evaluacion[idx - 1]
 
         print(f"Estudiantes inscritos en {asignatura.nombre_curso}:")
         for carnet in asignatura.estudiantes:
@@ -222,16 +264,23 @@ class RegistroInstructor:
 
         while True:
             try:
-                nota = float(input("Ingrese la nota (0-100): "))
+                nota = float(input("Ingrese el punteo: "))
                 if 0 <= nota <= 100:
                     break
                 else:
-                    print("La nota debe estar entre 0 y 100.")
+                    print("El punteo debe estar entre 0 y 100.")
             except ValueError:
-                print("Ingrese un número válido para la nota.")
+                print("Ingrese un número válido para el punteo.")
 
-        estudiante.cursos_inscritos[asignatura.codigo_curso]["Nota"] = nota
-        print(f" Nota {nota} asignada a {estudiante.nombre} en {asignatura.nombre_curso}\n")
+        evaluacion.asignar_punteo(carnet_est, nota)
+
+        total = 0
+        for ev in asignatura.evaluacion:
+            total += ev.obtener_punteo(carnet_est)
+
+        estudiante.cursos_inscritos[asignatura.codigo_curso]["Nota"] = total
+
+        print(f"Punteo {nota} registrado en '{evaluacion.nombre}'. Nota final actual: {total:.2f}\n")
 
 class Administrador(Usuario):
     def __init__(self):
@@ -321,9 +370,16 @@ class Administrador(Usuario):
 class Evaluacion:
     def __init__(self, nombre):
         self.nombre = nombre
+        self._punteos = {}
 
     def mostrar_evaluacion(self):
         print(f"Evaluación: {self.nombre}")
+
+    def asignar_punteo(self, carnet, nota):
+        self._punteos[carnet] = nota
+
+    def obtener_punteo(self, carnet):
+        return self._punteos.get(carnet, 0)
 
 class Examen(Evaluacion):
     def __init__(self, nombre, duracion):
@@ -372,7 +428,7 @@ while True:
 
             if codigo == admin.codigo_ingreso:
                 while True:
-                    print("--\nPortal del ADMIN 🤑🤑--\n")
+                    print("\n--Portal del ADMIN 🤑🤑--\n")
                     print("1. Crear curso")
                     print("2. Asignar curso a instructor")
                     print("3. Reporte de notas")
@@ -464,7 +520,7 @@ while True:
                                             print("")
 
                                             codigo_curso_algo = input(
-                                                "Ingrese el código del curso en el que desea añadir notas: ")
+                                                "Ingrese el código del curso en el que desea añadir punteos: ")
 
                                             asignatura = None
                                             for curso in instructor._cursos_impartidos:
@@ -473,7 +529,7 @@ while True:
                                                     break
 
                                             if asignatura:
-                                                obj_instructor.anadir_nota(asignatura, obj_estudiantes)
+                                                obj_instructor.anadir_punteo_evaluacion(asignatura, obj_estudiantes)
                                             else:
                                                 print("Este curso no existe o no está asignado a usted.")
                                         else:
@@ -506,7 +562,7 @@ while True:
 
                 match opcion5:
                     case "1":
-                        print("\n--- Registro de Estudiane ---")
+                        print("\n--- Registro de Estudiante ---\n")
                         carnet=input("Ingrese su carnet: ")#validacion de existencia
                         if carnet not in obj_instructor.instructores_registrados:
                             obj_estudiantes.registrar_est(carnet)
@@ -565,7 +621,7 @@ while True:
 
                                         case "4":
                                             print("Mostrar notas")
-                                            obj_estudiantes.mostrar_notas(carnet_validacion)
+                                            obj_estudiantes.mostrar_notas(carnet_validacion, admin._cursos_creados)
 
                                         case "5":
                                             print("Saliendo del portal de estudiantes...")
