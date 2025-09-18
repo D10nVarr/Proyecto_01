@@ -450,8 +450,35 @@ class Administrador(Usuario):
         return self._codigo_ingreso
 
     def crear_curso(self):
-        nombre = input("Nombre de curso: ")
-        codigo_curso = input("Codigo de curso: ")
+        while True:
+            try:
+                nombre = input("Nombre de curso: ")
+                if nombre is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                nombre = nombre.strip()
+                if nombre == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
+
+        while True:
+            try:
+                codigo_curso = input("Codigo de curso: ")
+                if codigo_curso is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                codigo_curso = codigo_curso.strip()
+                if codigo_curso == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
 
         if codigo_curso not in self._cursos_creados:
             curso = Curso(nombre, codigo_curso)
@@ -467,8 +494,36 @@ class Administrador(Usuario):
         if not instructores_registrados:
             print("No hay instructores registrados")
             return
-        codigo_curso = input("Codigo de curso: ")
-        codigo_instructor = input("Codigo de instructor: ")
+
+        while True:
+            try:
+                codigo_curso = input("Codigo de curso: ")
+                if codigo_curso is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                codigo_curso = codigo_curso.strip()
+                if codigo_curso == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
+
+        while True:
+            try:
+                codigo_instructor = input("Codigo de instructor: ")
+                if codigo_instructor is None:
+                    print("Error: entrada vacía. Intente de nuevo.\n")
+                    continue
+                codigo_instructor = codigo_instructor.strip()
+                if codigo_instructor == "":
+                    print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                    continue
+            except Exception as e:
+                print(f"Error inesperado: {e}\n")
+            else:
+                break
 
         Curso_ADM = None
         for curso in self._cursos_creados:
@@ -646,7 +701,20 @@ while True:
                             print("El código de instructor no debe ser igual a un carnet de estudiante\n")
 
                     case "2":
-                        codigo_instructor = input("Ingrese su código de instructor: ")
+                        while True:
+                            try:
+                                codigo_instructor = input("Ingrese su código de instructor: ")
+                                if codigo_instructor is None:
+                                    print("Error: entrada vacía. Intente de nuevo.")
+                                    continue
+                                codigo_instructor = codigo_instructor.strip()
+                                if codigo_instructor == "":
+                                    print("No puede ingresar un valor vacío, intente nuevamente.")
+                                    continue
+                            except Exception as e:
+                                print(f"Error inesperado: {e}")
+                            else:
+                                break
                         instructor = obj_instructor.obtener_instructor(codigo_instructor)
 
                         if instructor:
@@ -666,7 +734,21 @@ while True:
                                                 print(curso.mostrar_datos_curso())
                                             print("")
 
-                                            codigo_curso_algo=input("Ingrese el código del curso al que desea asignarle un examen: ")
+                                            while True:
+                                                try:
+                                                    codigo_curso_algo = input(
+                                                        "Ingrese el código del curso al que desea asignarle un examen: ")
+                                                    if codigo_curso_algo is None:
+                                                        print("Error: entrada vacía. Intente de nuevo.\n")
+                                                        continue
+                                                    codigo_curso_algo = codigo_curso_algo.strip()
+                                                    if codigo_curso_algo == "":
+                                                        print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                                                        continue
+                                                except Exception as e:
+                                                    print(f"Error inesperado: {e}\n")
+                                                else:
+                                                    break
 
                                             asignatura = None
                                             for curso in admin._cursos_creados:
@@ -678,9 +760,9 @@ while True:
                                                 obj_instructor.crear_evaluacion(asignatura)
 
                                             else:
-                                                print("Este curso no existe")
+                                                print("Este curso no existe\n")
                                         else:
-                                            print("NO tiene cursos asignados")
+                                            print("NO tiene cursos asignados\n")
 
                                     case "2":
                                         if instructor._cursos_impartidos:
@@ -689,8 +771,21 @@ while True:
                                                 print(curso.mostrar_datos_curso())
                                             print("")
 
-                                            codigo_curso_algo = input(
-                                                "Ingrese el código del curso en el que desea añadir punteos: ")
+                                            while True:
+                                                try:
+                                                    codigo_curso_algo = input(
+                                                        "Ingrese el código del curso en el que desea añadir punteos: ")
+                                                    if codigo_curso_algo is None:
+                                                        print("Error: entrada vacía. Intente de nuevo.\n")
+                                                        continue
+                                                    codigo_curso_algo = codigo_curso_algo.strip()
+                                                    if codigo_curso_algo == "":
+                                                        print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                                                        continue
+                                                except Exception as e:
+                                                    print(f"Error inesperado: {e}\n")
+                                                else:
+                                                    break
 
                                             asignatura = None
                                             for curso in instructor._cursos_impartidos:
@@ -701,12 +796,12 @@ while True:
                                             if asignatura:
                                                 obj_instructor.anadir_punteo_evaluacion(asignatura, obj_estudiantes)
                                             else:
-                                                print("Este curso no existe o no está asignado a usted.")
+                                                print("Este curso no existe o no está asignado a usted.\n")
                                         else:
-                                            print("NO tiene cursos asignados")
+                                            print("NO tiene cursos asignados\n")
 
                                     case "3":
-                                        print("Saliendo del portal de instructores...")
+                                        print("Saliendo del portal de instructores...\n")
                                         break
 
                                     case _:
@@ -758,7 +853,20 @@ while True:
                             print(f"No existen estudiantes registrados\n")
 
                         else:
-                            carnet_validacion = input("Ingrese su código de estudiante: ")
+                            while True:
+                                try:
+                                    carnet_validacion = input("Ingrese su código de estudiante: ")
+                                    if carnet_validacion is None:
+                                        print("Error: entrada vacía. Intente de nuevo.\n")
+                                        continue
+                                    carnet_validacion = carnet_validacion.strip()
+                                    if carnet_validacion == "":
+                                        print("No puede ingresar un valor vacío, intente nuevamente.\n")
+                                        continue
+                                except Exception as e:
+                                    print(f"Error inesperado: {e}\n")
+                                else:
+                                    break
 
                             if carnet_validacion in obj_estudiantes.estudiantes_registrados:
                                 while True:
@@ -781,7 +889,23 @@ while True:
 
                                                 print("")
 
-                                                codigo_curso_buscador = input("Ingrese el código del curso al que se desee asignar: ")
+                                                while True:
+                                                    try:
+                                                        codigo_curso_buscador = input(
+                                                            "Ingrese el código del curso al que se desee asignar: ")
+                                                        if codigo_curso_buscador is None:
+                                                            print("Error: entrada vacía. Intente de nuevo.\n")
+                                                            continue
+                                                        codigo_curso_buscador = codigo_curso_buscador.strip()
+                                                        if codigo_curso_buscador == "":
+                                                            print(
+                                                                "No puede ingresar un valor vacío, intente nuevamente.\n")
+                                                            continue
+                                                    except Exception as e:
+                                                        print(f"Error inesperado: {e}\n")
+                                                    else:
+                                                        break
+
                                                 asignatura = None
                                                 for curso in admin._cursos_creados:
                                                     if curso.codigo_curso == codigo_curso_buscador:
