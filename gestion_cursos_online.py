@@ -57,6 +57,8 @@ class RegistroEstudiante:
             telefono=input("Ingrese su teléfono: ")
             if len(telefono)==8:
                 break
+            else:
+                print("Numero de teléfono no válido")
 
         if carnet not in self.estudiantes_registrados:
             estudiante = Estudiante(nombre, correo, telefono, carnet)
@@ -206,7 +208,7 @@ class Administrador(Usuario):
         nombre = input("Nombre de curso: ")
         codigo_curso = input("Codigo de curso: ")
 
-        if codigo_curso in self._cursos_creados:
+        if codigo_curso not in self._cursos_creados:
             curso = Curso(nombre, codigo_curso)
             self._cursos_creados.append(curso)
             print(f"Curso: {nombre} creado con exito\n")
@@ -235,6 +237,30 @@ class Administrador(Usuario):
             print(f"Curso: {Curso_ADM.nombre_curso} asignado a instructor: {instructor.nombre}")
         else:
             print("No hay cursos registrados")
+
+    def reporte_general(self, obj_estudiantes):
+        print("\n--- Reporte General de cursos ---")
+        if not self._cursos_creados:
+            print("No hay cursos creados")
+            return
+        for curso in self._cursos_creados:
+            if not curso.estudiantes:
+                print(f"{curso.nombre_curso} ({curso.codigo_curso}): Sin estudiantes inscritos.\n")
+                continue
+            total_notas = 0
+            cantidad = 0
+
+            for carnet in curso.estudiantes:
+                if carnet in obj_estudiantes.estudiantes_registrados:
+                    estudinte = obj_estudiantes.estudiantes_registrados[carnet]
+                    if curso.codigo_curso in estudinte.cursos_inscritos:
+                        total_notas += estudinte.cursos_inscritos[curso.codigo_curso].nota
+                        cantidad += 1
+            if cantidad > 0:
+                promedio = total_notas / cantidad
+                print(f"{curso.nombre_curso} ({curso.codigo_curso}) | Promedio general: {promedio:.2f}\n")
+            else:
+                print(f"{curso.nombre_curso} ({curso.codigo_curso}): No hay notas registradas.\n")
 
 class Evaluacion:
     def __init__(self, nombre):
@@ -289,7 +315,7 @@ while True:
 
             if codigo == admin.codigo_ingreso:
                 while True:
-                    print("--Portal del ADMIN 🤑🤑--\n")
+                    print("--\nPortal del ADMIN 🤑🤑--\n")
                     print("1. Crear curso")
                     print("2. Asignar curso a instructor")
                     print("3. Reporte de notas")
@@ -304,6 +330,7 @@ while True:
                             admin.asignar_curso_a_instructor(obj_instructor.instructores_registrados)
                         case "3":
                             print("Reporte de promedio de notas")
+                            admin.reporte_general(obj_estudiantes)
                         case "4":
                             print("Saliendo del portal admin....")
                             break
