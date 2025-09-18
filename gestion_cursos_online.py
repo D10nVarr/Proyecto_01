@@ -186,6 +186,7 @@ class Administrador(Usuario):
             print(f"Curso: {Curso_ADM} asignado a instructor: {instructor.nombre}")
         else:
             print("No hay cursos registrados")
+
     def reporte_general(self,obj_estudiantes):
         print("\n--- Reporte General de cursos ---")
         if not self._cursos_creados:
@@ -202,14 +203,29 @@ class Administrador(Usuario):
                 if carnet in obj_estudiantes.estudiantes_registrados:
                     estudinte = obj_estudiantes.estudiantes_registrados[carnet]
                     if curso.codigo_curso in estudinte.cursos_inscritos:
-                        total_notas += estudinte.cursos_inscritos[curso.codigo_curso].nota
+                        total_notas += estudinte.cursos_inscritos[curso.codigo_curso]["Nota"]
                         cantidad +=1
             if cantidad > 0:
                 promedio = total_notas / cantidad
                 print(f"{curso.nombre_curso} ({curso.codigo_curso}) | Promedio general: {promedio:.2f}\n")
             else:
                 print(f"{curso.nombre_curso} ({curso.codigo_curso}): No hay notas registradas.\n")
-
+        def reporte_bajo_estudiantes(self, obj_estudiantes,limite=60):
+            if not self._cursos_creados:
+                print("No hay cursos creados")
+                return
+            for curso in self._cursos_creados:
+                if not curso.estudiantes:
+                    print(f"{curso.nombre_curso}({curso.codigo_curso}): Sin estudiantes inscritos.\n")
+                    continue
+                print(f"\nCurso: {curso.nombre_curso}({curso.codigo_curso})")
+            for carnet in curso.estudiantes:
+                if carnet in obj_estudiantes.estudiantes_registrados:
+                    estudiante = obj_estudiantes.estudiantes_registrados[carnet]
+                    if curso.codigo_curso in estudiante.cursos_inscritos:
+                        nota = estudiante.cursos_inscritos[curso.codigo_curso]["nota"]
+                        if nota > limite:
+                            print(f"{estudiante._carnet}-{estudiante.nombre}-Nota: {nota:.2f}")
 class Evaluacion:
     def __init__(self, nombre):
         self.nombre = nombre
