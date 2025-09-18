@@ -372,8 +372,8 @@ class Evaluacion:
         self.nombre = nombre
         self._punteos = {}
 
-    def mostrar_evaluacion(self):
-        print(f"Evaluación: {self.nombre}")
+    def mostrar_info(self):
+        pass
 
     def asignar_punteo(self, carnet, nota):
         self._punteos[carnet] = nota
