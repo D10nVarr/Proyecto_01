@@ -154,13 +154,11 @@ class RegistroEstudiante:
             curso = next((c for c in cursos_admin if c.codigo_curso == codigo), None)
             if not curso:
                 continue
-
             print(f"➡️ {datos['Nombre']} ({codigo}):")
             if not curso.evaluacion:
                 print("   No hay evaluaciones registradas.")
                 print("   Nota final: 0\n")
                 continue
-
             total = 0
             for ev in curso.evaluacion:
                 punteo = ev.obtener_punteo(obj_estudiante._carnet)
@@ -251,7 +249,6 @@ class RegistroInstructor:
                 print(f"Error inesperado: {e}\n")
             else:
                 break
-
         if codigo not in self.instructores_registrados:
             instructor = Instructor(nombre, correo, telefono, codigo, profesion)
             self.instructores_registrados[codigo] = instructor
@@ -264,7 +261,6 @@ class RegistroInstructor:
             return self.instructores_registrados[codigo]
         else:
             return None
-
     def crear_evaluacion(self, curso):
         print("Seleccione tipo de evaluación:")
         print("1. Examen")
@@ -494,6 +490,13 @@ class Administrador(Usuario):
         if not instructores_registrados:
             print("No hay instructores registrados")
             return
+        print("\n📋 Instructores disponibles:")
+        for codigo, instructor in instructores_registrados.items():
+            print(f"Código: {codigo} | Nombre: {instructor.nombre} | Correo: {instructor.correo}")
+
+        print("\n📋 Cursos disponibles:")
+        for curso in self._cursos_creados:
+            print(f"Código: {curso.codigo_curso} | Nombre: {curso.nombre_curso}\n")
 
         while True:
             try:
