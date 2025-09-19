@@ -704,7 +704,7 @@ while True:
                 print("2. Acceder al portal")
                 print("3. Salir")
 
-                opcion3 = input("\nInicie sesión: ")
+                opcion3 = input("\nSeleccione lo que desee: ")
 
                 match opcion3:
                     case "1":
