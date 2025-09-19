@@ -128,15 +128,25 @@ class RegistroEstudiante:
             return
 
         for codigo, datos in estudiante.cursos_inscritos.items():
-            curso = next((c for c in cursos_admin if c.codigo_curso == codigo), None)
-            if curso:
-                print(f"\n📘 {curso.nombre_curso} ({codigo})")
-                tareas = [ev for ev in curso.evaluacion if isinstance(ev, Tarea)]
-                if not tareas:
-                    print("   No hay tareas registradas.")
-                else:
-                    for ev in tareas:
-                        print("   -", ev.mostrar_info())
+            curso = None
+            for c in cursos_admin:
+                if c.codigo_curso == codigo:
+                    curso = c
+                    break
+
+            if curso is None:
+                continue
+
+            print(f"\n📘 {curso.nombre_curso} ({codigo})")
+
+            hay_tareas = False
+            for ev in curso.evaluacion:
+                if hasattr(ev, "fecha_entrega"):
+                    print("   -", ev.mostrar_info())
+                    hay_tareas = True
+
+            if not hay_tareas:
+                print("   No hay tareas registradas.")
 
     def mostrar_notas(self, carnet, cursos_admin):
         obj_estudiante = self.estudiantes_registrados.get(carnet)
@@ -151,18 +161,33 @@ class RegistroEstudiante:
         print(f"Notas por curso del estudiante {obj_estudiante._carnet}:\n")
 
         for codigo, datos in obj_estudiante.cursos_inscritos.items():
-            curso = next((c for c in cursos_admin if c.codigo_curso == codigo), None)
-            if not curso:
+            curso = None
+            for c in cursos_admin:
+                if c.codigo_curso == codigo:
+                    curso = c
+                    break
+
+            if curso is None:
                 continue
+
             print(f"➡️ {datos['Nombre']} ({codigo}):")
+
             if not curso.evaluacion:
                 print("   No hay evaluaciones registradas.")
                 print("   Nota final: 0\n")
                 continue
+
             total = 0
             for ev in curso.evaluacion:
                 punteo = ev.obtener_punteo(obj_estudiante._carnet)
-                tipo = "Examen" if isinstance(ev, Examen) else "Tarea"
+
+                if hasattr(ev, "duracion"):
+                    tipo = "Examen"
+                elif hasattr(ev, "fecha_entrega"):
+                    tipo = "Tarea"
+                else:
+                    tipo = "Evaluación"
+
                 print(f"   - {tipo}: {ev.nombre} -> {punteo}")
                 total += punteo
 
@@ -575,13 +600,13 @@ class Administrador(Usuario):
                     continue
                 print(f"\nCurso: {curso.nombre_curso}({curso.codigo_curso})")
 
-            for carnet in curso.estudiantes:
-                if carnet in obj_estudiantes.estudiantes_registrados:
-                    estudiante = obj_estudiantes.estudiantes_registrados[carnet]
-                    if curso.codigo_curso in estudiante.cursos_inscritos:
-                        nota = estudiante.cursos_inscritos[curso.codigo_curso]["Nota"]
-                        if nota < limite:
-                            print(f"{estudiante._carnet} - {estudiante.nombre} - Nota: {nota:.2f}")
+                for carnet in curso.estudiantes:
+                    if carnet in obj_estudiantes.estudiantes_registrados:
+                        estudiante = obj_estudiantes.estudiantes_registrados[carnet]
+                        if curso.codigo_curso in estudiante.cursos_inscritos:
+                            nota = estudiante.cursos_inscritos[curso.codigo_curso]["Nota"]
+                            if nota < limite:
+                                print(f"{estudiante._carnet} - {estudiante.nombre} - Nota: {nota:.2f}")
 
 class Evaluacion:
     def __init__(self, nombre):
